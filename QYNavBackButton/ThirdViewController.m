@@ -7,6 +7,7 @@
 //
 
 #import "ThirdViewController.h"
+#import "UIViewController+CustomBackButton.h"
 
 @interface ThirdViewController ()
 
@@ -26,6 +27,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+// 重新返回按钮的点击事件
+- (void)customNavBackButtonMethod {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -36,4 +42,8 @@
 }
 */
 
+- (IBAction)pushAction:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    [self.navigationController pushViewController:[mainStoryboard instantiateViewControllerWithIdentifier:@"ThirdVC"] animated:YES];
+}
 @end

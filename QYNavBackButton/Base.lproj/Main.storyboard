@@ -15,7 +15,7 @@
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="BtU-bV-Q2u"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Hen-uf-Qco"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OrU-Pg-FA6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -70,7 +70,7 @@
                                 <rect key="frame" x="277" y="285" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="pushAction:" destination="InC-Nq-DmP" eventType="touchUpInside" id="er5-rZ-FUh"/>
+                                    <action selector="presentAction:" destination="InC-Nq-DmP" eventType="touchUpInside" id="tlg-1R-mfx"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -85,6 +85,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FsU-h9-sXY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1027" y="389"/>
+        </scene>
+        <!--ThirdVC-->
+        <scene sceneID="vkg-C3-fYb">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ReV-6d-Jf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="ThirdVC" id="TQF-dZ-Eo9" customClass="ThirdViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QD0-fK-WEa"/>
+                        <viewControllerLayoutGuide type="bottom" id="UhU-IE-1oB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1Jv-qa-rQb">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d6U-dx-9NY">
+                                <rect key="frame" x="277" y="285" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="pushAction:" destination="TQF-dZ-Eo9" eventType="touchUpInside" id="YML-3w-6lC"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="d6U-dx-9NY" firstAttribute="centerX" secondItem="1Jv-qa-rQb" secondAttribute="centerX" id="LSU-Fv-Oa7"/>
+                            <constraint firstItem="d6U-dx-9NY" firstAttribute="centerY" secondItem="1Jv-qa-rQb" secondAttribute="centerY" id="fNX-vO-dCc"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="ThirdVC" id="ODh-nm-Ig3"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1031" y="1092"/>
         </scene>
     </scenes>
 </document>

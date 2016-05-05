@@ -14,8 +14,8 @@
 		1EEB50141CD9E862004678F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB50131CD9E862004678F0 /* Assets.xcassets */; };
 		1EEB50171CD9E862004678F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB50151CD9E862004678F0 /* LaunchScreen.storyboard */; };
 		1EEB50201CD9E8E6004678F0 /* SecendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */; };
-		1EEB50231CD9E9CC004678F0 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB50221CD9E9CC004678F0 /* ThirdViewController.m */; };
 		1EEB50281CDA2C7B004678F0 /* UIViewController+CustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */; };
+		1EEB502C1CDAF819004678F0 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB502B1CDAF819004678F0 /* ThirdViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,10 +31,10 @@
 		1EEB50181CD9E862004678F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EEB501E1CD9E8E6004678F0 /* SecendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecendViewController.h; sourceTree = "<group>"; };
 		1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecendViewController.m; sourceTree = "<group>"; };
-		1EEB50211CD9E9CC004678F0 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
-		1EEB50221CD9E9CC004678F0 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
 		1EEB50261CDA2C7B004678F0 /* UIViewController+CustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CustomBackButton.h"; sourceTree = "<group>"; };
 		1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CustomBackButton.m"; sourceTree = "<group>"; };
+		1EEB502A1CDAF819004678F0 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
+		1EEB502B1CDAF819004678F0 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +74,8 @@
 				1EEB500E1CD9E862004678F0 /* FirstViewController.m */,
 				1EEB501E1CD9E8E6004678F0 /* SecendViewController.h */,
 				1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */,
-				1EEB50211CD9E9CC004678F0 /* ThirdViewController.h */,
-				1EEB50221CD9E9CC004678F0 /* ThirdViewController.m */,
+				1EEB502A1CDAF819004678F0 /* ThirdViewController.h */,
+				1EEB502B1CDAF819004678F0 /* ThirdViewController.m */,
 				1EEB50101CD9E862004678F0 /* Main.storyboard */,
 				1EEB50131CD9E862004678F0 /* Assets.xcassets */,
 				1EEB50151CD9E862004678F0 /* LaunchScreen.storyboard */,
@@ -173,8 +173,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EEB500F1CD9E862004678F0 /* FirstViewController.m in Sources */,
-				1EEB50231CD9E9CC004678F0 /* ThirdViewController.m in Sources */,
 				1EEB50281CDA2C7B004678F0 /* UIViewController+CustomBackButton.m in Sources */,
+				1EEB502C1CDAF819004678F0 /* ThirdViewController.m in Sources */,
 				1EEB500C1CD9E862004678F0 /* AppDelegate.m in Sources */,
 				1EEB50201CD9E8E6004678F0 /* SecendViewController.m in Sources */,
 				1EEB50091CD9E862004678F0 /* main.m in Sources */,
@@ -328,6 +328,7 @@
 				1EEB501D1CD9E862004678F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

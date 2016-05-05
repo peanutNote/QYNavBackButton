@@ -37,6 +37,11 @@
 //    }
 }
 
+
+- (void)customNavBackButtonMethod {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -46,9 +51,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)pushAction:(id)sender {
-    ThirdViewController *secendVC = [[ThirdViewController alloc] init];
-    [self.navigationController pushViewController:secendVC animated:YES];
+- (IBAction)presentAction:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    UINavigationController *secendNav = [[UINavigationController alloc] initWithRootViewController:[mainStoryboard instantiateViewControllerWithIdentifier:@"ThirdVC"]];
+    [self presentViewController:secendNav animated:YES completion:nil];
 }
 
 @end

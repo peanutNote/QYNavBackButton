@@ -61,7 +61,7 @@
         //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
         //    [nav_back addGestureRecognizer:tap];
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backButton.frame = CGRectMake(0, 0, 20, 21);
+        backButton.frame = CGRectMake(0, 0, 20, 30);
         [backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
         [nav_back addSubview:backButton];
     }

@@ -10,4 +10,6 @@
 
 @interface ThirdViewController : UIViewController
 
+- (IBAction)pushAction:(id)sender;
+
 @end

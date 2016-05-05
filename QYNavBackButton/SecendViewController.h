@@ -10,6 +10,6 @@
 
 @interface SecendViewController : UIViewController
 
-- (IBAction)pushAction:(id)sender;
+- (IBAction)presentAction:(id)sender;
 
 @end

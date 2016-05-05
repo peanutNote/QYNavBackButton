@@ -23,8 +23,9 @@
 }
 
 - (void)popAction:(UIButton *)sender {
-    NSLog(@"呵呵呵");
+    NSLog(@"come here");
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
