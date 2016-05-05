@@ -16,6 +16,7 @@
 		1EEB50201CD9E8E6004678F0 /* SecendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */; };
 		1EEB50281CDA2C7B004678F0 /* UIViewController+CustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */; };
 		1EEB502C1CDAF819004678F0 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB502B1CDAF819004678F0 /* ThirdViewController.m */; };
+		1EEB502E1CDB2E74004678F0 /* demo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB502D1CDB2E74004678F0 /* demo1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CustomBackButton.m"; sourceTree = "<group>"; };
 		1EEB502A1CDAF819004678F0 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		1EEB502B1CDAF819004678F0 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
+		1EEB502D1CDB2E74004678F0 /* demo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demo1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				1EEB50131CD9E862004678F0 /* Assets.xcassets */,
 				1EEB50151CD9E862004678F0 /* LaunchScreen.storyboard */,
 				1EEB50181CD9E862004678F0 /* Info.plist */,
+				1EEB502D1CDB2E74004678F0 /* demo1.png */,
 				1EEB50071CD9E862004678F0 /* Supporting Files */,
 			);
 			path = QYNavBackButton;
@@ -161,6 +164,7 @@
 			files = (
 				1EEB50171CD9E862004678F0 /* LaunchScreen.storyboard in Resources */,
 				1EEB50141CD9E862004678F0 /* Assets.xcassets in Resources */,
+				1EEB502E1CDB2E74004678F0 /* demo1.png in Resources */,
 				1EEB50121CD9E862004678F0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
