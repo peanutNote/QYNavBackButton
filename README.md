@@ -58,7 +58,8 @@ _UINavigationBarBackIndicatorView就是返回按钮的箭头也就是我们需�
 这个UINavigationItemButtonView应该是系统在这个view的draw方法里就决定frame，修改frame就触发needdisplay重新改变它的frame，因此这个view只会根据其上的label（也就是返回按钮显示的文字）的内容变化而改变宽度其余基本不可变，我们虽然将label的内容设置为空但是这个UINavigationItemButtonView的大小却并没有改变同时点击区域也没有改变。从控制台里的还可看到这个veiw的userInteractionEnabled属性为NO，如果说点击的是这个view，但现在这个view是不可交互的，只能说明是真正响应点击事件的是这个view背后的某个控件（视图结构和代码里都没有发现这个控件）。因此要想解决我之前提到的问题就得利用这个UINavigationItemButtonView，我们可以在viewDidAppear中取得到UINavigationItemButtonView（如果用遍历的方式获取会有一个延迟，因为这个view的位置固定为第三个所以我们就直接获取就可以了），将其userInteractionEnabled设置为yes并且在这个View上添加手势tap事件即可：
 
 ```objc
-UIView *nav_back = [self.navigationController.navigationBar.subviews objectAtIndex:2];
+NSArray *subviews = self.navigationController.navigationBar.subviews;
+UIView *nav_back = [subviews objectAtIndex:subviews.count - 2];
 if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
      nav_back.userInteractionEnabled = YES;
      //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
@@ -133,7 +134,8 @@ if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
 
 - (void)mm_viewDidAppear {
     [self mm_viewDidAppear];
-    UIView *nav_back = [self.navigationController.navigationBar.subviews objectAtIndex:2];
+    NSArray *subviews = self.navigationController.navigationBar.subviews;
+    UIView *nav_back = [subviews objectAtIndex:subviews.count - 2];
     if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
         nav_back.userInteractionEnabled = YES;
         //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
