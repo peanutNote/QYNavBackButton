@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EC4AD761CE4C708008F49C0 /* UIViewController+CustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC4AD751CE4C708008F49C0 /* UIViewController+CustomBackButton.m */; };
 		1EEB50091CD9E862004678F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB50081CD9E862004678F0 /* main.m */; };
 		1EEB500C1CD9E862004678F0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB500B1CD9E862004678F0 /* AppDelegate.m */; };
 		1EEB500F1CD9E862004678F0 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB500E1CD9E862004678F0 /* FirstViewController.m */; };
@@ -14,12 +15,13 @@
 		1EEB50141CD9E862004678F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB50131CD9E862004678F0 /* Assets.xcassets */; };
 		1EEB50171CD9E862004678F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB50151CD9E862004678F0 /* LaunchScreen.storyboard */; };
 		1EEB50201CD9E8E6004678F0 /* SecendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */; };
-		1EEB50281CDA2C7B004678F0 /* UIViewController+CustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */; };
 		1EEB502C1CDAF819004678F0 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB502B1CDAF819004678F0 /* ThirdViewController.m */; };
 		1EEB502E1CDB2E74004678F0 /* demo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB502D1CDB2E74004678F0 /* demo1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EC4AD741CE4C708008F49C0 /* UIViewController+CustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CustomBackButton.h"; sourceTree = "<group>"; };
+		1EC4AD751CE4C708008F49C0 /* UIViewController+CustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CustomBackButton.m"; sourceTree = "<group>"; };
 		1EEB50041CD9E862004678F0 /* QYNavBackButton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QYNavBackButton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EEB50081CD9E862004678F0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EEB500A1CD9E862004678F0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -32,8 +34,6 @@
 		1EEB50181CD9E862004678F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EEB501E1CD9E8E6004678F0 /* SecendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecendViewController.h; sourceTree = "<group>"; };
 		1EEB501F1CD9E8E6004678F0 /* SecendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecendViewController.m; sourceTree = "<group>"; };
-		1EEB50261CDA2C7B004678F0 /* UIViewController+CustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CustomBackButton.h"; sourceTree = "<group>"; };
-		1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CustomBackButton.m"; sourceTree = "<group>"; };
 		1EEB502A1CDAF819004678F0 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		1EEB502B1CDAF819004678F0 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
 		1EEB502D1CDB2E74004678F0 /* demo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demo1.png; sourceTree = "<group>"; };
@@ -99,8 +99,8 @@
 		1EEB50291CDA2C83004678F0 /* QYNavBackButton */ = {
 			isa = PBXGroup;
 			children = (
-				1EEB50261CDA2C7B004678F0 /* UIViewController+CustomBackButton.h */,
-				1EEB50271CDA2C7B004678F0 /* UIViewController+CustomBackButton.m */,
+				1EC4AD741CE4C708008F49C0 /* UIViewController+CustomBackButton.h */,
+				1EC4AD751CE4C708008F49C0 /* UIViewController+CustomBackButton.m */,
 			);
 			path = QYNavBackButton;
 			sourceTree = "<group>";
@@ -177,8 +177,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EEB500F1CD9E862004678F0 /* FirstViewController.m in Sources */,
-				1EEB50281CDA2C7B004678F0 /* UIViewController+CustomBackButton.m in Sources */,
 				1EEB502C1CDAF819004678F0 /* ThirdViewController.m in Sources */,
+				1EC4AD761CE4C708008F49C0 /* UIViewController+CustomBackButton.m in Sources */,
 				1EEB500C1CD9E862004678F0 /* AppDelegate.m in Sources */,
 				1EEB50201CD9E8E6004678F0 /* SecendViewController.m in Sources */,
 				1EEB50091CD9E862004678F0 /* main.m in Sources */,

@@ -46,35 +46,54 @@ self.navigationItem.backBarButtonItem = backBtn;
 
 * _UINavigationBarBackground ：(UIImageView)导航栏背景图(不可以直接设置图片)
 * UINavigationItemView ：(UIView)包含显示导航栏标题
-* UINavigationItemButtonView ：(UIView)包含显示导航栏左视图（不可移除、更改大小、颜色，可以隐藏，决定了点击区域的大小）
+* UINavigationItemButtonView ：(UIView)包含显示导航栏左视图（不可移除、更改大小、颜色，可以隐藏，决定了我们的自定义区域是否显示）
 * _UINavigationBarBackIndicatorView ：(UIImageView)导航栏返回按钮箭头图片（不可以修改图片）
 
-_UINavigationBarBackIndicatorView就是返回按钮的箭头也就是我们需要保留的，UINavigationItemButtonView就是我们需要研究的也是我们前面提到问题的主要原因所在。再次看看这个对象在控制台的输出：
+_UINavigationBarBackIndicatorView就是返回按钮的箭头也就是我们需要保留的，UINavigationItemButtonView就是就是决定导航栏要不要显示返回按钮的依据。再次看看这个对象在控制台的输出：
 
 ```objc
  |    |    | <UINavigationItemButtonView: 0x8ab6c80; frame = (8 6; 41 30); opaque = NO; userInteractionEnabled = NO; layer = <CALayer: 0x8ab6d60>>
  |    |    |    | <UILabel: 0x8ab6f10; frame = (-981 -995; 91 22); text = ''; clipsToBounds = YES; opaque = NO; userInteractionEnabled = NO; layer = <CALayer: 0x8ab6fb0>>
 ```
-这个UINavigationItemButtonView应该是系统在这个view的draw方法里就决定frame，修改frame就触发needdisplay重新改变它的frame，因此这个view只会根据其上的label（也就是返回按钮显示的文字）的内容变化而改变宽度其余基本不可变，我们虽然将label的内容设置为空但是这个UINavigationItemButtonView的大小却并没有改变同时点击区域也没有改变。从控制台里的还可看到这个veiw的userInteractionEnabled属性为NO，如果说点击的是这个view，但现在这个view是不可交互的，只能说明是真正响应点击事件的是这个view背后的某个控件（视图结构和代码里都没有发现这个控件）。因此要想解决我之前提到的问题就得利用这个UINavigationItemButtonView，我们可以在viewDidAppear中取得到UINavigationItemButtonView（如果用遍历的方式获取会有一个延迟，因为这个view的位置固定为第三个所以我们就直接获取就可以了），将其userInteractionEnabled设置为yes并且在这个View上添加手势tap事件即可：
+这个UINavigationItemButtonView应该是系统在这个view的draw方法里就决定frame，修改frame就触发needdisplay重新改变它的frame，因此这个view只会根据其上的label（也就是返回按钮显示的文字）的内容变化而改变宽度其余基本不可变，我们虽然将label的内容设置为空但是这个UINavigationItemButtonView的大小却并没有改变同时点击区域也没有改变。从控制台里的还可看到这个veiw的userInteractionEnabled属性为NO，很明显我们的返回事件并不在这个view上，只能说明是真正响应点击事件的是这个view背后添加了某个UIGestureRecognizer。因此要想解决我之前提到的问题首先我们得覆盖这个默认的返回响应事件，然后添加我们自己的事件。同时还得想到的是当我们有需要自己定义左按钮的时候就得移除这种覆盖操作，因此我在这里创建了一个自定义的视图QYMaskView覆盖系统事件，然后通过UINavigationItemButtonView的存在与否来控制QYMaskView是否存在就可以实现以上效果
 
 ```objc
-NSArray *subviews = self.navigationController.navigationBar.subviews;
-UIView *nav_back = [subviews objectAtIndex:subviews.count - 2];
-if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
-     nav_back.userInteractionEnabled = YES;
-     //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
-     //    [nav_back addGestureRecognizer:tap];
-     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     backButton.frame = CGRectMake(0, 0, 20, 30);
-     [backButton addTarget:self action:@selector(customMethod) forControlEvents:UIControlEventTouchUpInside];
-     [nav_back addSubview:backButton];
- }
+for (UIView *view in self.navigationController.navigationBar.subviews) {
+        if ([view isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
+            nav_backView = view;
+        } else if ([view isKindOfClass:[QYMaskView class]]) {
+            nav_qyView = (QYMaskView *)view;
+        }
+    }
+    if (nav_backView && !nav_qyView) {
+        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(8, 6, 100, 30)];
+        qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        qyButtonView.backButton.frame = CGRectMake(0, 0, 20, 30);
+        [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+        [qyButtonView addSubview:qyButtonView.backButton];
+        [self.navigationController.navigationBar addSubview:qyButtonView];
+    } else if (nav_backView && nav_qyView) {
+        [nav_qyView.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [nav_qyView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+    } else if (!nav_backView && nav_qyView) {
+        [nav_qyView removeFromSuperview];
+    }
 ```
-这样可以改变返回按钮的点击事件，此时想要解决点击范围只能在这个view上添加一个指定大小的按钮了，可能有人会疑惑UINavigationBar每个导航栏公用一个，这样会不会导致多次添加，这里我用实践告诉大家不会的，每个viewController在创建时它的UINavigationItemButtonView会重新加载。最后总结出来的解决办法就是创建一个viewController的分类:  
+通过在QYMaskView中添加按钮来替换系统返回事件。其中有一步是给按钮添加与移除按钮事件，目的是为了加入我们自定义的事件。当视图控制器显示的时候我们会去给该按钮重新添加点击事件，由于customNavBackButtonMethod事件定义到了.h中，当我们在本类中也实现了这个方法，我们在分类中调用这个方法就会执行本类中的实现（因为此时该方法的定义已经被覆盖）。因此只要在对应的viewDidLoad中导入
+
+`#import "UIViewController+CustomBackButton.h"`
+
+然后复写customNavBackButtonMethod方法就可以在点击返回按钮时执行到你复写的方法中了。最后总结出来的解决办法就是创建一个viewController的分类:  
 > UIViewController+CustomBackButton.h文件
 
 ```objc
 #import <UIKit/UIKit.h>
+
+@interface QYMaskView : UIView
+
+@property (nonatomic, strong) UIButton *backButton;
+
+@end
 
 @interface UIViewController (CustomBackButton)
 
@@ -87,6 +106,10 @@ if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
 ```objc
 #import "UIViewController+CustomBackButton.h"
 #import <objc/runtime.h>
+
+@implementation QYMaskView
+
+@end
 
 @implementation UIViewController (CustomBackButton)
 
@@ -134,19 +157,29 @@ if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
 
 - (void)mm_viewDidAppear {
     [self mm_viewDidAppear];
-    NSArray *subviews = self.navigationController.navigationBar.subviews;
-    UIView *nav_back = [subviews objectAtIndex:subviews.count - 2];
-    if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
-        nav_back.userInteractionEnabled = YES;
-        //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
-        //    [nav_back addGestureRecognizer:tap];
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backButton.frame = CGRectMake(0, 0, 20, 30);
-        [backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
-        [nav_back addSubview:backButton];
+    UIView *nav_backView = nil;
+    QYMaskView *nav_qyView = nil;
+    for (UIView *view in self.navigationController.navigationBar.subviews) {
+        if ([view isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
+            nav_backView = view;
+        } else if ([view isKindOfClass:[QYMaskView class]]) {
+            nav_qyView = (QYMaskView *)view;
+        }
+    }
+    if (nav_backView && !nav_qyView) {
+        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(8, 6, 100, 30)];
+        qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        qyButtonView.backButton.frame = CGRectMake(0, 0, 20, 30);
+        [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+        [qyButtonView addSubview:qyButtonView.backButton];
+        [self.navigationController.navigationBar addSubview:qyButtonView];
+    } else if (nav_backView && nav_qyView) {
+        [nav_qyView.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [nav_qyView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+    } else if (!nav_backView && nav_qyView) {
+        [nav_qyView removeFromSuperview];
     }
 }
-
 
 - (void)customNavBackButtonMethod {
     [self.navigationController popViewControllerAnimated:YES];
@@ -154,6 +187,4 @@ if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
 
 @end
 ```
-在项目里面创建完以后就会生效。这里所做的就是在所有的viewController执行viewDidLoad的时候将返回按钮的文字置空，在执行viewDidAppear的时候添加一个自定义的按钮去响应pop事件。如果遇到需要自定义返回事件我在.h将返回事件开放出来，只要在对应的viewDidLoad中导入  
-`#import "UIViewController+CustomBackButton.h"`  
-然后复写customNavBackButtonMethod方法就可以在点击返回按钮时执行到你复写的方法中了，好了，是不是感觉很简单呢。当然在研究这一个问题过程中还是有很多我没弄明白的地方，可能在各位同学使用的时候产生各种问题，给大家带来的不便敬请谅解，同时欢迎大家提出宝贵的建议予以改进，在此感激不尽！
+导入到项目中就可以生效了。这里所做的就是在所有的viewController执行viewDidLoad的时候将返回按钮的文字置空，在执行viewDidAppear的时候添加一个自定义的按钮去响应pop事件。好了，是不是感觉很简单呢。当然在研究这一个问题过程中还是有很多我没弄明白的地方，可能在各位同学使用的时候产生各种问题，给大家带来的不便敬请谅解，同时欢迎大家提出宝贵的建议予以改进，在此感激不尽！

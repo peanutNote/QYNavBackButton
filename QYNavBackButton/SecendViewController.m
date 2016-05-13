@@ -26,18 +26,6 @@
 //    self.navigationItem.leftBarButtonItem = backBarBtn;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-//    for (UIView *nav_back in self.navigationController.navigationBar.subviews) {
-//        if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
-//            nav_back.userInteractionEnabled = YES;
-//            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
-//            [nav_back addGestureRecognizer:tap];
-//        }
-//    }
-}
-
-
 - (void)customNavBackButtonMethod {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -53,8 +41,7 @@
 
 - (IBAction)presentAction:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    UINavigationController *secendNav = [[UINavigationController alloc] initWithRootViewController:[mainStoryboard instantiateViewControllerWithIdentifier:@"ThirdVC"]];
-    [self presentViewController:secendNav animated:YES completion:nil];
+    [self.navigationController pushViewController:[mainStoryboard instantiateViewControllerWithIdentifier:@"ThirdVC"] animated:YES];
 }
 
 @end

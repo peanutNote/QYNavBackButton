@@ -1,13 +1,18 @@
 //
 //  UIViewController+CustomBackButton.m
-//  CMMShipper
+//  QYNavBackButton
 //
 //  Created by qianye on 16/5/3.
-//  Copyright © 2016年 OmniMinions. All rights reserved.
+//  Copyright © 2016年 qianye. All rights reserved.
 //
+//  https://github.com/peanutNote/QYNavBackButton
 
 #import "UIViewController+CustomBackButton.h"
 #import <objc/runtime.h>
+
+@implementation QYMaskView
+
+@end
 
 @implementation UIViewController (CustomBackButton)
 
@@ -55,18 +60,29 @@
 
 - (void)mm_viewDidAppear {
     [self mm_viewDidAppear];
-    UIView *nav_back = [self.navigationController.navigationBar.subviews objectAtIndex:2];
-    if ([nav_back isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
-        nav_back.userInteractionEnabled = YES;
-        //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backAction:)];
-        //    [nav_back addGestureRecognizer:tap];
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backButton.frame = CGRectMake(0, 0, 20, 30);
-        [backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
-        [nav_back addSubview:backButton];
+    UIView *nav_backView = nil;
+    QYMaskView *nav_qyView = nil;
+    for (UIView *view in self.navigationController.navigationBar.subviews) {
+        if ([view isKindOfClass:NSClassFromString(@"UINavigationItemButtonView")]) {
+            nav_backView = view;
+        } else if ([view isKindOfClass:[QYMaskView class]]) {
+            nav_qyView = (QYMaskView *)view;
+        }
+    }
+    if (nav_backView && !nav_qyView) {
+        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(8, 6, 100, 30)];
+        qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        qyButtonView.backButton.frame = CGRectMake(0, 0, 20, 30);
+        [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+        [qyButtonView addSubview:qyButtonView.backButton];
+        [self.navigationController.navigationBar addSubview:qyButtonView];
+    } else if (nav_backView && nav_qyView) {
+        [nav_qyView.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [nav_qyView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+    } else if (!nav_backView && nav_qyView) {
+        [nav_qyView removeFromSuperview];
     }
 }
-
 
 - (void)customNavBackButtonMethod {
     [self.navigationController popViewControllerAnimated:YES];

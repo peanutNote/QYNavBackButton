@@ -29,7 +29,7 @@
 
 // 重新返回按钮的点击事件
 - (void)customNavBackButtonMethod {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 /*

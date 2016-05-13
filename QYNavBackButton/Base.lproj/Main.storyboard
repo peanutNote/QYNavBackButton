@@ -89,7 +89,6 @@
         <!--ThirdVC-->
         <scene sceneID="vkg-C3-fYb">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ReV-6d-Jf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="ThirdVC" id="TQF-dZ-Eo9" customClass="ThirdViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QD0-fK-WEa"/>
@@ -115,6 +114,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="ThirdVC" id="ODh-nm-Ig3"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ReV-6d-Jf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1031" y="1092"/>
         </scene>
