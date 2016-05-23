@@ -7,7 +7,7 @@
 //
 
 #import "ThirdViewController.h"
-#import "UIViewController+CustomBackButton.h"
+#import "UIViewController+QYCustomBackButton.h"
 
 @interface ThirdViewController ()
 

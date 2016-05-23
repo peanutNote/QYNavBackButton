@@ -1,5 +1,5 @@
 //
-//  UIViewController+CustomBackButton.h
+//  UIViewController+QYCustomBackButton.h
 //  QYNavBackButton
 //
 //  Created by qianye on 16/5/3.
@@ -15,7 +15,7 @@
 
 @end
 
-@interface UIViewController (CustomBackButton)
+@interface UIViewController (QYCustomBackButton)
 
 - (void)customNavBackButtonMethod;
 

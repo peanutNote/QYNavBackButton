@@ -4,7 +4,7 @@
 
 ## 使用方法
 * 将QYNavBackButton文件夹导入项目中即可
-* 如果遇到需要自定义事件，可在对应的viewController中`#import "UIViewController+CustomBackButton.h"`，然后复写`- (void)customNavBackButtonMethod`方法即可
+* 如果遇到需要自定义事件，可在对应的viewController中`#import "UIViewController+QYCustomBackButton.h"`，然后复写`- (void)customNavBackButtonMethod`方法即可
 
 ## 具体研究
 最近遇到一个关于导航栏返回按钮的问题，因为之前项目里面都是用的系统默认的返回按钮样式所以没有想过要去更改，后来有需要将返回按钮箭头旁边的文字去掉，同时将该返回按钮的点击事件重新定义。一开始尝试自定义按钮然后设置为leftBarButtonItem，但是这样图片可能跟系统自带的不一样，还有就是返回按钮的位置跟系统自带的不一样。后来找了一些资料，发现将文字去掉比较简单，一般做法是控制器中添加如下代码，然后他的下一级控制就有一个只有箭头没有文字返回按钮：
@@ -66,9 +66,9 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
         }
     }
     if (nav_backView && !nav_qyView) {
-        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(8, 6, 100, 30)];
+        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
         qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        qyButtonView.backButton.frame = CGRectMake(0, 0, 20, 30);
+        qyButtonView.backButton.frame = CGRectMake(8, 6, 30, 30);
         [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
         [qyButtonView addSubview:qyButtonView.backButton];
         [self.navigationController.navigationBar addSubview:qyButtonView];
@@ -81,10 +81,10 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
 ```
 通过在QYMaskView中添加按钮来替换系统返回事件。其中有一步是给按钮添加与移除按钮事件，目的是为了加入我们自定义的事件。当视图控制器显示的时候我们会去给该按钮重新添加点击事件，由于customNavBackButtonMethod事件定义到了.h中，当我们在本类中也实现了这个方法，我们在分类中调用这个方法就会执行本类中的实现（因为此时该方法的定义已经被覆盖）。因此只要在对应的viewDidLoad中导入
 
-`#import "UIViewController+CustomBackButton.h"`
+`#import "UIViewController+QYCustomBackButton.h"`
 
 然后复写customNavBackButtonMethod方法就可以在点击返回按钮时执行到你复写的方法中了。最后总结出来的解决办法就是创建一个viewController的分类:  
-> UIViewController+CustomBackButton.h文件
+> UIViewController+QYCustomBackButton.h文件
 
 ```objc
 #import <UIKit/UIKit.h>
@@ -95,23 +95,23 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
 
 @end
 
-@interface UIViewController (CustomBackButton)
+@interface UIViewController (QYCustomBackButton)
 
 - (void)customNavBackButtonMethod;
 
 @end
 ```
->UIViewController+CustomBackButton.m文件
+>UIViewController+QYCustomBackButton.m文件
 
 ```objc
-#import "UIViewController+CustomBackButton.h"
+#import "UIViewController+QYCustomBackButton.h"
 #import <objc/runtime.h>
 
 @implementation QYMaskView
 
 @end
 
-@implementation UIViewController (CustomBackButton)
+@implementation UIViewController (QYCustomBackButton)
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -119,10 +119,10 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
         Class class = [self class];
         
         SEL originalSelector = @selector(viewDidLoad);
-        SEL swizzledSelector = @selector(mm_viewDidLoad);
+        SEL swizzledSelector = @selector(qy_viewDidLoad);
         
         SEL originalSelector1 = @selector(viewDidAppear:);
-        SEL swizzledSelector1 = @selector(mm_viewDidAppear);
+        SEL swizzledSelector1 = @selector(qy_viewDidAppear);
         
         Method originalMethod = class_getInstanceMethod(class, originalSelector);
         Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
@@ -149,14 +149,14 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
 
 #pragma mark - Method Swizzling
 
-- (void)mm_viewDidLoad {
-    [self mm_viewDidLoad];
+- (void)qy_viewDidLoad {
+    [self qy_viewDidLoad];
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self.navigationItem setBackBarButtonItem:backButtonItem];
 }
 
-- (void)mm_viewDidAppear {
-    [self mm_viewDidAppear];
+- (void)qy_viewDidAppear {
+    [self qy_viewDidAppear];
     UIView *nav_backView = nil;
     QYMaskView *nav_qyView = nil;
     for (UIView *view in self.navigationController.navigationBar.subviews) {
@@ -167,9 +167,9 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
         }
     }
     if (nav_backView && !nav_qyView) {
-        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(8, 6, 100, 30)];
+        QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
         qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        qyButtonView.backButton.frame = CGRectMake(0, 0, 20, 30);
+        qyButtonView.backButton.frame = CGRectMake(8, 6, 30, 30);
         [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
         [qyButtonView addSubview:qyButtonView.backButton];
         [self.navigationController.navigationBar addSubview:qyButtonView];
