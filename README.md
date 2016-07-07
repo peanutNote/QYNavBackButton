@@ -79,11 +79,8 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
         [nav_qyView removeFromSuperview];
     }
 ```
-通过在QYMaskView中添加按钮来替换系统返回事件。其中有一步是给按钮添加与移除按钮事件，目的是为了加入我们自定义的事件。当视图控制器显示的时候我们会去给该按钮重新添加点击事件，由于customNavBackButtonMethod事件定义到了.h中，当我们在本类中也实现了这个方法，我们在分类中调用这个方法就会执行本类中的实现（因为此时该方法的定义已经被覆盖）。因此只要在对应的viewDidLoad中导入
-
-`#import "UIViewController+QYCustomBackButton.h"`
-
-然后复写customNavBackButtonMethod方法就可以在点击返回按钮时执行到你复写的方法中了。最后总结出来的解决办法就是创建一个viewController的分类:  
+通过在QYMaskView中添加按钮来替换系统返回事件。其中有一步是给按钮添加与移除按钮事件，目的是为了加入我们自定义的事件。当视图控制器显示的时候我们会去给该按钮重新添加点击事件，由于customNavBackButtonMethod事件定义到了.h中，当我们在本类中也实现了这个方法，我们在分类中调用这个方法就会执行本类中的实现（因为此时该方法的定义已经被覆盖）。因此只要在对应的viewController中复写customNavBackButtonMethod方法就可以在点击返回按钮时执行到你复写的方法中了。  
+注意：iOS7以后可以通过手势进行返回，由属性`interactivePopGestureRecognizer`来控制，而且这种方式并不会调用自定义的方法与系统的pop方法，这里通过禁用该手势来解决这问题，因此在复写返回事件中需要判断option是否为yes，如果为yes需要直接返回是否禁止该手势，而不能执行其他代码。最后总结出来的解决办法就是创建一个viewController的分类:  
 > UIViewController+QYCustomBackButton.h文件
 
 ```objc
@@ -95,9 +92,23 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
 
 @end
 
-@interface UIViewController (QYCustomBackButton)
+@protocol QYNavBackButtonDelegate <NSObject>
+@optional
+/**
+ *  自定义返回事件，在需要自定义返回事件的viewController中实现该方法
+ *
+ *  @param option 是否需要检测手滑返回
+ *
+ *  @return 如果该值为yes需要直接返回yes(表示需要手滑返回)或者no(表示不需要手滑返回)
+ */
+- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option;
+@end
 
-- (void)customNavBackButtonMethod;
+@interface UIViewController (QYCustomBackButton) <QYNavBackButtonDelegate>
+/**
+ *  重新布局返回事件
+ */
+- (void)setQYNavNeedLayout;
 
 @end
 ```
@@ -118,31 +129,31 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
     dispatch_once(&onceToken, ^{
         Class class = [self class];
         
-        SEL originalSelector = @selector(viewDidLoad);
-        SEL swizzledSelector = @selector(qy_viewDidLoad);
+        SEL originalviewDidLoad = @selector(viewDidLoad);
+        SEL swizzledviewDidLoad = @selector(qy_viewDidLoad);
         
-        SEL originalSelector1 = @selector(viewDidAppear:);
-        SEL swizzledSelector1 = @selector(qy_viewDidAppear);
+        SEL originalviewDidAppear = @selector(viewDidAppear:);
+        SEL swizzledviewDidAppear = @selector(qy_viewDidAppear);
         
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+        Method originalMethodLoad = class_getInstanceMethod(class, originalviewDidLoad);
+        Method swizzledMethodLoad = class_getInstanceMethod(class, swizzledviewDidLoad);
         
-        Method originalMethod1 = class_getInstanceMethod(class, originalSelector1);
-        Method swizzledMethod1 = class_getInstanceMethod(class, swizzledSelector1);
+        Method originalMethodAppear = class_getInstanceMethod(class, originalviewDidAppear);
+        Method swizzledMethodAppear = class_getInstanceMethod(class, swizzledviewDidAppear);
         
-        BOOL didAddMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
-        BOOL didAddMethod1 = class_addMethod(class, originalSelector1, method_getImplementation(swizzledMethod1), method_getTypeEncoding(swizzledMethod1));
+        BOOL didAddMethodLoad = class_addMethod(class, originalviewDidLoad, method_getImplementation(swizzledMethodLoad), method_getTypeEncoding(swizzledMethodLoad));
+        BOOL didAddMethodAppear = class_addMethod(class, originalviewDidAppear, method_getImplementation(swizzledMethodAppear), method_getTypeEncoding(swizzledMethodAppear));
 
-        if (didAddMethod) {
-            class_replaceMethod(class, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
+        if (didAddMethodLoad) {
+            class_replaceMethod(class, swizzledviewDidLoad, method_getImplementation(originalMethodLoad), method_getTypeEncoding(originalMethodLoad));
         } else {
-            method_exchangeImplementations(originalMethod, swizzledMethod);
+            method_exchangeImplementations(originalMethodLoad, swizzledMethodLoad);
         }
         
-        if (didAddMethod1) {
-            class_replaceMethod(class, swizzledSelector1, method_getImplementation(originalMethod1), method_getTypeEncoding(originalMethod1));
+        if (didAddMethodAppear) {
+            class_replaceMethod(class, swizzledviewDidAppear, method_getImplementation(originalMethodAppear), method_getTypeEncoding(originalMethodAppear));
         } else {
-            method_exchangeImplementations(originalMethod1, swizzledMethod1);
+            method_exchangeImplementations(originalMethodAppear, swizzledMethodAppear);
         }
     });
 }
@@ -157,6 +168,10 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
 
 - (void)qy_viewDidAppear {
     [self qy_viewDidAppear];
+    [self setQYNavNeedLayout];
+}
+
+- (void)setQYNavNeedLayout {
     UIView *nav_backView = nil;
     QYMaskView *nav_qyView = nil;
     for (UIView *view in self.navigationController.navigationBar.subviews) {
@@ -166,23 +181,36 @@ for (UIView *view in self.navigationController.navigationBar.subviews) {
             nav_qyView = (QYMaskView *)view;
         }
     }
+    if ([self customBackMethodCheckPopWithGesture:YES]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    } else {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
     if (nav_backView && !nav_qyView) {
         QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
         qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         qyButtonView.backButton.frame = CGRectMake(8, 6, 30, 30);
-        [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+        [qyButtonView.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [qyButtonView addSubview:qyButtonView.backButton];
         [self.navigationController.navigationBar addSubview:qyButtonView];
     } else if (nav_backView && nav_qyView) {
         [nav_qyView.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [nav_qyView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
+        [nav_qyView.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     } else if (!nav_backView && nav_qyView) {
         [nav_qyView removeFromSuperview];
     }
 }
 
-- (void)customNavBackButtonMethod {
+- (void)backButtonAction:(UIButton *)sender {
+    [self customBackMethodCheckPopWithGesture:NO];
+}
+
+- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option {
+    if (option) {
+        return YES;
+    }
     [self.navigationController popViewControllerAnimated:YES];
+    return YES;
 }
 
 @end

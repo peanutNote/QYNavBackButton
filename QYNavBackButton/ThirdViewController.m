@@ -5,9 +5,9 @@
 //  Created by qianye on 16/5/4.
 //  Copyright © 2016年 qianye. All rights reserved.
 //
+//  https://github.com/peanutNote/QYNavBackButton
 
 #import "ThirdViewController.h"
-#import "UIViewController+QYCustomBackButton.h"
 
 @interface ThirdViewController ()
 
@@ -28,8 +28,12 @@
 }
 
 // 重新返回按钮的点击事件
-- (void)customNavBackButtonMethod {
+- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option {
+    if (option) {
+        return NO;
+    }
     [self.navigationController popToRootViewControllerAnimated:YES];
+    return YES;
 }
 
 /*

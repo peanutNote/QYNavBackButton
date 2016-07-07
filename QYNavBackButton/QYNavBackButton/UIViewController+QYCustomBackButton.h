@@ -15,8 +15,22 @@
 
 @end
 
-@interface UIViewController (QYCustomBackButton)
+@protocol QYNavBackButtonDelegate <NSObject>
+@optional
+/**
+ *  自定义返回事件，在需要自定义返回事件的viewController中实现该方法
+ *
+ *  @param option 是否需要检测手滑返回
+ *
+ *  @return 如果该值为yes需要直接返回yes(表示需要手滑返回)或者no(表示不需要手滑返回)
+ */
+- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option;
+@end
 
-- (void)customNavBackButtonMethod;
+@interface UIViewController (QYCustomBackButton) <QYNavBackButtonDelegate>
+/**
+ *  重新布局返回事件
+ */
+- (void)setQYNavNeedLayout;
 
 @end
