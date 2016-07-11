@@ -19,12 +19,16 @@
 @optional
 /**
  *  自定义返回事件，在需要自定义返回事件的viewController中实现该方法
- *
- *  @param option 是否需要检测手滑返回
- *
- *  @return 如果该值为yes需要直接返回yes(表示需要手滑返回)或者no(表示不需要手滑返回)
  */
-- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option;
+- (void)customNavBackButtonMethod;
+
+/**
+ *  右滑手势返回是否可用
+ *
+ *  @return YES表示手势可用，NO表示不可用
+ */
+- (BOOL)isPopGestureAvailable;
+
 @end
 
 @interface UIViewController (QYCustomBackButton) <QYNavBackButtonDelegate>

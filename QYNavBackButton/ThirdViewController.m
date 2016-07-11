@@ -27,13 +27,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-// 重新返回按钮的点击事件
-- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option {
-    if (option) {
-        return NO;
-    }
+- (void)customNavBackButtonMethod {
     [self.navigationController popToRootViewControllerAnimated:YES];
-    return YES;
+}
+
+- (BOOL)isPopGestureAvailable {
+    return NO;
 }
 
 /*

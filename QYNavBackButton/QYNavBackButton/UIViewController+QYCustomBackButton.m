@@ -73,35 +73,27 @@
             nav_qyView = (QYMaskView *)view;
         }
     }
-    if ([self customBackMethodCheckPopWithGesture:YES]) {
-        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    } else {
-        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    }
+    self.navigationController.interactivePopGestureRecognizer.enabled = [self isPopGestureAvailable];
     if (nav_backView && !nav_qyView) {
         QYMaskView *qyButtonView = [[QYMaskView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
         qyButtonView.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         qyButtonView.backButton.frame = CGRectMake(8, 6, 30, 30);
-        [qyButtonView.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [qyButtonView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
         [qyButtonView addSubview:qyButtonView.backButton];
         [self.navigationController.navigationBar addSubview:qyButtonView];
     } else if (nav_backView && nav_qyView) {
         [nav_qyView.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [nav_qyView.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [nav_qyView.backButton addTarget:self action:@selector(customNavBackButtonMethod) forControlEvents:UIControlEventTouchUpInside];
     } else if (!nav_backView && nav_qyView) {
         [nav_qyView removeFromSuperview];
     }
 }
 
-- (void)backButtonAction:(UIButton *)sender {
-    [self customBackMethodCheckPopWithGesture:NO];
+- (void)customNavBackButtonMethod {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (BOOL)customBackMethodCheckPopWithGesture:(BOOL)option {
-    if (option) {
-        return YES;
-    }
-    [self.navigationController popViewControllerAnimated:YES];
+- (BOOL)isPopGestureAvailable {
     return YES;
 }
 
